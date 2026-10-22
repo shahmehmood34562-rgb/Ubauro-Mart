@@ -117,7 +117,6 @@ function filterCategory(category) {
     }
   });
 }
-  
 function placeOrder() {
   if (cart.length === 0) {
     document.getElementById('orderMessage').textContent =
@@ -125,6 +124,46 @@ function placeOrder() {
     return;
   }
 
+  const name = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const address = document.getElementById('customerAddress').value.trim();
+
+  if (!name || !phone || !address) {
+    document.getElementById('orderMessage').textContent =
+      'Please enter your name, mobile number and address.';
+    return;
+  }
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+  document.getElementById('orderMessage').textContent = 'Saving your order...';
+
+  db.collection('orders').add({
+    customerName: name,
+    customerPhone: phone,
+    customerAddress: address,
+    items: cart.map(item => ({
+      name: item.name,
+      price: item.price,
+      quantity: item.qty
+    })),
+    total: total,
+    status: 'Pending',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    document.getElementById('orderMessage').textContent =
+      'Thank you, ' + name + '! Your order has been saved successfully.';
+    cart = [];
+    renderCart();
+  })
+  .catch(error => {
+    console.error('Order save error:', error);
+    document.getElementById('orderMessage').textContent =
+      'Order could not be saved. Please try again.';
+  });
+                                                                       }
+  
   const name = document.getElementById('customerName').value.trim();
   const phone = document.getElementById('customerPhone').value.trim();
   const address = document.getElementById('customerAddress').value.trim();
@@ -143,6 +182,16 @@ function placeOrder() {
   cart = [];
   renderCart();
   } 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyAue0h_9bDeHb1XpiDNVSX5sOvOpK4sXGA",
+  authDomain: "ubauro-mart.firebaseapp.com",
+  projectId: "ubauro-mart",
+  storageBucket: "ubauro-mart.firebasestorage.app",
+  messagingSenderId: "136259916482",
+  appId: "1:136259916482:web:726dd384aa303f3163a15b"
+};
 </script>
 </body>
   </html>
