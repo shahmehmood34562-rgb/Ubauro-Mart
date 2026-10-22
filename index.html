@@ -35,9 +35,13 @@ footer{background:white;padding:13px;display:flex;justify-content:space-around;p
 </header>
 <main>
 <h3>Shop by Category</h3>
+
 <div class="categories">
-<span>🥦 Grocery</span><span>🥤 Drinks</span>
-<span>🍪 Snacks</span><span>🏠 Household</span>
+<button onclick="filterCategory('grocery')">🥦 Grocery</button>
+<button onclick="filterCategory('drinks')">🥤 Drinks</button>
+<button onclick="filterCategory('snacks')">🍪 Snacks</button>
+<button onclick="filterCategory('household')">🏠 Household</button>
+<button onclick="filterCategory('all')">All Products</button>
 </div>
 <h3>Popular Products</h3>
 <div class="grid" id="products">
@@ -82,6 +86,25 @@ let q=document.getElementById('search').value.toLowerCase();
 document.querySelectorAll('.card').forEach(p=>{
 p.style.display=p.dataset.name.includes(q)?'block':'none';
 });
+}  
+function filterCategory(category) {
+  const products = document.querySelectorAll('.card');
+
+  products.forEach(product => {
+    const name = product.dataset.name.toLowerCase();
+
+    if (category === 'all') {
+      product.style.display = 'block';
+    } else if (category === 'grocery') {
+      product.style.display = ['rice', 'cooking oil', 'eggs'].some(x => name.includes(x)) ? 'block' : 'none';
+    } else if (category === 'drinks') {
+      product.style.display = 'none';
+    } else if (category === 'snacks') {
+      product.style.display = ['biscuits', 'bread'].some(x => name.includes(x)) ? 'block' : 'none';
+    } else if (category === 'household') {
+      product.style.display = 'none';
+    }
+  });
 }
 </script>
 </body>
