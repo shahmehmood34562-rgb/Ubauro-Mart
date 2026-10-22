@@ -55,10 +55,21 @@ footer{background:white;padding:13px;display:flex;justify-content:space-around;p
 <h3>🛒 Your Cart (<span id="count">0</span>)</h3>
 <div id="cart">Your cart is empty.</div>
 <h3 id="total">Total: Rs. 0</h3>
+  
+<div id="checkout">
+  <h3>Checkout — Ubauro Mart</h3>
+
+  <input id="customerName" type="text" placeholder="Your full name">
+  <input id="customerPhone" type="tel" placeholder="Mobile number">
+  <textarea id="customerAddress" placeholder="Complete delivery address"></textarea>
+
+  <button onclick="placeOrder()">Place Order</button>
+  <p id="orderMessage"></p>
+</div>
+  
 </main>
 <footer><span>🏠 Home</span><span>🛒 Cart</span><span>👤 Account</span></footer>
 <script>
-  alert("Ubauro Mart JavaScript Working!");
 let cart=[];
 function add(name,price){
 let item=cart.find(x=>x.name===name);
@@ -106,6 +117,33 @@ function filterCategory(category) {
     }
   });
 }
+  
+function placeOrder() {
+  if (cart.length === 0) {
+    document.getElementById('orderMessage').textContent =
+      'Please add products to your cart first.';
+    return;
+  }
+
+  const name = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const address = document.getElementById('customerAddress').value.trim();
+
+  if (!name || !phone || !address) {
+    document.getElementById('orderMessage').textContent =
+      'Please enter your name, mobile number and address.';
+    return;
+  }
+
+  document.getElementById('orderMessage').textContent =
+    'Thank you, ' + name + '! Your order total is Rs. ' +
+    cart.reduce((sum, item) => sum + item.price * item.qty, 0) +
+    '. This is a demo confirmation; your order has not been sent to the shop.';
+
+  cart = [];
+  renderCart();
+  }
+  
 </script>
 </body>
   </html>
