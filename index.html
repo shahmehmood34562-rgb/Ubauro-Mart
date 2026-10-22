@@ -56,6 +56,28 @@ footer{background:white;padding:13px;display:flex;justify-content:space-around;p
 <div id="cart">Your cart is empty.</div>
 <h3 id="total">Total: Rs. 0</h3>
   
+<div id="customerAuth">
+  <h3>Customer Login / Sign Up</h3>
+
+  <input id="authEmail" type="email" placeholder="Your email address">
+  <input id="authPassword" type="password" placeholder="Password (at least 6 characters)">
+
+  <button onclick="signUpCustomer()">Create Account</button>
+  <button onclick="loginCustomer()">Login</button>
+  <button onclick="logoutCustomer()">Logout</button>
+
+<div id="customerAuth">
+  <h3>Customer Login / Sign Up</h3>
+
+  <input id="authEmail" type="email" placeholder="Your email address">
+  <input id="authPassword" type="password" placeholder="Password (at least 6 characters)">
+
+  <button onclick="signUpCustomer()">Create Account</button>
+  <button onclick="loginCustomer()">Login</button>
+  <button onclick="logoutCustomer()">Logout</button>
+
+  <p id="authMessage">Please create an account or log in to continue.</p>
+</div>
 <div id="checkout">
   <h3>Checkout — Ubauro Mart</h3>
 
@@ -184,6 +206,8 @@ function placeOrder() {
   } 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  
     const firebaseConfig = {
   apiKey: "AIzaSyAue0h_9bDeHb1XpiDNVSX5sOvOpK4sXGA",
   authDomain: "ubauro-mart.firebaseapp.com",
@@ -192,6 +216,50 @@ function placeOrder() {
   messagingSenderId: "136259916482",
   appId: "1:136259916482:web:726dd384aa303f3163a15b"
 };
+  
+function signUpCustomer() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+
+  if (!email || password.length < 6) {
+    document.getElementById('authMessage').textContent =
+      'Enter a valid email and a password of at least 6 characters.';
+    return;
+  }
+
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById('authMessage').textContent =
+        'Account created! You are logged in.';
+    })
+    .catch(error => {
+      document.getElementById('authMessage').textContent = error.message;
+    });
+}
+function loginCustomer() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById('authMessage').textContent =
+        'Login successful!';
+    })
+    .catch(error => {
+      document.getElementById('authMessage').textContent = error.message;
+    });
+}
+
+function logoutCustomer() {
+  firebase.auth().signOut()
+    .then(() => {
+      document.getElementById('authMessage').textContent =
+        'You are logged out.';
+    })
+    .catch(error => {
+      document.getElementById('authMessage').textContent = error.message;
+    });
+}
 </script>
 </body>
   </html>
