@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ubauro Mart</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7f4;color:#222}
+header{background:#147d43;color:white;padding:22px 16px;border-radius:0 0 22px 22px}
+header h1{margin:0 0 8px}
+header p{margin:0 0 16px}
+input{width:100%;padding:13px;border:0;border-radius:10px;font-size:16px}
+main{padding:16px}
+.categories{display:flex;gap:8px;flex-wrap:wrap}
+.categories span{background:#dff3e5;padding:10px;border-radius:20px}
+.products{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:white;padding:12px;border-radius:14px;box-shadow:0 2px 8px #0001}
+.pic{font-size:38px;text-align:center;background:#edf5ee;padding:15px;border-radius:10px}
+.card h3{font-size:16px}
+.price{color:#147d43;font-weight:bold}
+button{width:100%;padding:11px;border:0;border-radius:8px;background:#147d43;color:white;font-weight:bold}
+#cart{background:white;padding:12px;border-radius:10px;line-height:1.8}
+</style>
+</head>
+<body>
+<header>
+<h1>🛒 Ubauro Mart</h1>
+<p>Your Local Shopping Store</p>
+<input id="search" placeholder="Search products..." oninput="filterProducts()">
+</header>
+<main>
+<h3>Categories</h3>
+<div class="categories">
+<span>🥦 Grocery</span><span>🥤 Drinks</span>
+<span>🍪 Snacks</span><span>🏠 Household</span>
+</div>
+<h3>Popular Products</h3>
+<div class="products" id="products">
+<div class="card"><div class="pic">🥛</div><h3>Fresh Milk</h3><p class="price">Rs. 220</p><button onclick="add('Fresh Milk',220)">Add to Cart</button></div>
+<div class="card"><div class="pic">🍞</div><h3>Bread</h3><p class="price">Rs. 150</p><button onclick="add('Bread',150)">Add to Cart</button></div>
+<div class="card"><div class="pic">🍚</div><h3>Rice 1kg</h3><p class="price">Rs. 300</p><button onclick="add('Rice 1kg',300)">Add to Cart</button></div>
+<div class="card"><div class="pic">🛢️</div><h3>Cooking Oil</h3><p class="price">Rs. 550</p><button onclick="add('Cooking Oil',550)">Add to Cart</button></div>
+</div>
+<h3>🛒 Your Cart</h3>
+<div id="cart">Your cart is empty.</div>
+<h3 id="total">Total: Rs. 0</h3>
+</main>
+<script>
+let cart=[];
+function add(name,price){
+cart.push({name,price});
+document.getElementById('cart').innerHTML=cart.map((p,i)=>
+'<div>'+p.name+' — Rs. '+p.price+
+' <button onclick="removeItem('+i+')">Remove</button></div>'
+).join('');
+document.getElementById('total').textContent=
+'Total: Rs. '+cart.reduce((sum,p)=>sum+p.price,0);
+}
+function removeItem(i){
+cart.splice(i,1);
+document.getElementById('cart').innerHTML=cart.length?
+cart.map((p,j)=>'<div>'+p.name+' — Rs. '+p.price+
+' <button onclick="removeItem('+j+')">Remove</button></div>').join(''):
+'Your cart is empty.';
+document.getElementById('total').textContent=
+'Total: Rs. '+cart.reduce((sum,p)=>sum+p.price,0);
+}
+function filterProducts(){
+let q=document.getElementById('search').value.toLowerCase();
+document.querySelectorAll('.card').forEach(p=>{
+p.style.display=p.innerText.toLowerCase().includes(q)?'block':'none';
+});
+}
+</script>
+</body>
+</html>
