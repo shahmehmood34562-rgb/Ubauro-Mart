@@ -66,16 +66,6 @@ footer{background:white;padding:13px;display:flex;justify-content:space-around;p
   <button onclick="loginCustomer()">Login</button>
   <button onclick="logoutCustomer()">Logout</button>
 
-<div id="customerAuth">
-  <h3>Customer Login / Sign Up</h3>
-
-  <input id="authEmail" type="email" placeholder="Your email address">
-  <input id="authPassword" type="password" placeholder="Password (at least 6 characters)">
-
-  <button onclick="signUpCustomer()">Create Account</button>
-  <button onclick="loginCustomer()">Login</button>
-  <button onclick="logoutCustomer()">Logout</button>
-
   <p id="authMessage">Please create an account or log in to continue.</p>
 </div>
 <div id="checkout">
@@ -90,7 +80,10 @@ footer{background:white;padding:13px;display:flex;justify-content:space-around;p
 </div>
   
 </main>
-<footer><span>🏠 Home</span><span>🛒 Cart</span><span>👤 Account</span></footer>
+<footer><span>🏠 Home</span><span>🛒 Cart</span><span>👤 Account</span></footer>  
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script>
 let cart=[];
 function add(name,price){
@@ -184,30 +177,8 @@ function placeOrder() {
     document.getElementById('orderMessage').textContent =
       'Order could not be saved. Please try again.';
   });
-                                                                       }
-  
-  const name = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('customerPhone').value.trim();
-  const address = document.getElementById('customerAddress').value.trim();
-
-  if (!name || !phone || !address) {
-    document.getElementById('orderMessage').textContent =
-      'Please enter your name, mobile number and address.';
-    return;
-  }
-
-  document.getElementById('orderMessage').textContent =
-    'Thank you, ' + name + '! Your order total is Rs. ' +
-    cart.reduce((sum, item) => sum + item.price * item.qty, 0) +
-    '. This is a demo confirmation; your order has not been sent to the shop.';
-
-  cart = [];
-  renderCart();
-  } 
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  
+                                                                       
+  <script>
     const firebaseConfig = {
   apiKey: "AIzaSyAue0h_9bDeHb1XpiDNVSX5sOvOpK4sXGA",
   authDomain: "ubauro-mart.firebaseapp.com",
@@ -216,7 +187,10 @@ function placeOrder() {
   messagingSenderId: "136259916482",
   appId: "1:136259916482:web:726dd384aa303f3163a15b"
 };
+    firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 </script>  
+  <script>
 function signUpCustomer() {
   const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
